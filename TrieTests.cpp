@@ -50,11 +50,30 @@ TEST(TrieTest2, CheckAllWordsStartingWithPrefix)
     vector<string> wordsWithInvalidPrefix = trie.allWordsStartingWithPrefix("ab34");
     vector<string> wordsWithUpperPrefix = trie.allWordsStartingWithPrefix("CAT");
 
-    ASSERT_EQ(wordsWithPrefixCat.size(), 1) << "Error: Vector has incorrect size.";
-    //ASSERT_EQ(wordsWithPrefixD.size(), wordsWithPrefixCat.size()) << "Error: Vectors do not have the same size.";
-    //ASSERT_EQ(wordsWithEmptyPrefix.size(), 5) << "Error: Vector has incorrect size for empty string.";
-    //ASSERT_EQ(wordsWithInvalidPrefix.size(), 0) << "Error: Vector is not empty when it should be.";
-    //ASSERT_EQ(wordsWithUpperPrefix.size(), 0) << "Error: Vector is not empty when it should be.";
+    ASSERT_EQ(wordsWithPrefixCat.size(), 2) << "Error: Vector has incorrect size.";
+    ASSERT_EQ(wordsWithPrefixD.size(), wordsWithPrefixCat.size()) << "Error: Vectors do not have the same size.";
+    ASSERT_EQ(wordsWithEmptyPrefix.size(), 5) << "Error: Vector has incorrect size for empty string.";
+    ASSERT_EQ(wordsWithInvalidPrefix.size(), 0) << "Error: Vector is not empty when it should be.";
+    ASSERT_EQ(wordsWithUpperPrefix.size(), 0) << "Error: Vector is not empty when it should be.";
+}
+
+TEST(TrieTest3, CheckRuleOfThree)
+{
+    Trie trie;
+    trie.addWord("cat");
+    trie.addWord("catastrophe");
+    vector<string> wordsWithPrefixCat = trie.allWordsStartingWithPrefix("cat");
+
+    Trie trieCopy(trie);
+    vector<string> copyWordsWithPrefix = trieCopy.allWordsStartingWithPrefix("cat");
+
+    Trie trieAssign;
+    trieAssign = trie;
+    vector<string> assignWordsWithPrefix = trieAssign.allWordsStartingWithPrefix("cat");
+
+    ASSERT_EQ(wordsWithPrefixCat.size(), copyWordsWithPrefix.size()) << "Error: Failed to copy values";
+    ASSERT_EQ(wordsWithPrefixCat.size(), assignWordsWithPrefix.size()) << "Error: Failed to assign values";
+
 }
 
 int main(int argc, char* argv[])

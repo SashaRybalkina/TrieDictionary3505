@@ -13,6 +13,8 @@ Date: October 3, 2023
 using std::string;
 using std::vector;
 using std::map;
+using std::cout;
+using std::endl;
 
 /// @brief The Trie class creates a tree with a potential to have 26
 /// branches of Tries. Each branch represents an implied character,
@@ -199,11 +201,11 @@ vector<string> Trie::allWordsStartingWithPrefix(string prefix)
             for (int i = 1; i < prefix.size(); i++)
             {
                 char current = prefix[i];
-                temp = temp.branching[current];
                 if (i == prefix.size() - 1 && temp.branching.count(current))
                 {
-                    temp.checkAllBranches(allWords, prefix);
+                    temp.branching[current].checkAllBranches(allWords, prefix);
                 }
+                temp = temp.branching[current];
             }
         }
     }
