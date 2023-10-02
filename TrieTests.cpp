@@ -15,10 +15,8 @@ using std::string;
 using std::ifstream;
 using std::vector;
 
-/// @brief This tests the addWord, isWord, and allWordsStartingWithPrefix
-/// methods of the Trie class as well as the copy constructor and assignment
-/// operator.
-
+/// @brief This tests the addWord and isWord methods. The testing covers words that
+/// share prefixes, words that don't exist in the tree, and empty words.
 TEST(TrieTest1, CheckAddWordAndIsWord)
 {
     Trie trie;
@@ -34,6 +32,10 @@ TEST(TrieTest1, CheckAddWordAndIsWord)
     ASSERT_EQ(trie.isWord(""), 0) << "Error: Empty string edge case failed.";
 }
 
+/// @brief This tests the allWordsStartingWithPrefix method by generating several
+/// vectors with different inputs and then checking their sizes. The inputs are
+/// single-character prefixes, prefixes that are words, empty prefixes, invalid
+/// prefixes, and capital-case prefixes.
 TEST(TrieTest2, CheckAllWordsStartingWithPrefix)
 {
     Trie trie;
@@ -57,6 +59,11 @@ TEST(TrieTest2, CheckAllWordsStartingWithPrefix)
     ASSERT_EQ(wordsWithUpperPrefix.size(), 0) << "Error: Vector is not empty when it should be.";
 }
 
+/// @brief This tests the copy constructor and copy assignment. There is an original
+/// Trie, a copied Trie using the copy constructor, and a copied Trie using the copy
+/// assignment. Three vectors from the three different Tries are generated using the
+/// allWordsStartingWithPrefix method, and if their sizes are not the same, this is
+/// how we know that the copying failed.
 TEST(TrieTest3, CheckRuleOfThree)
 {
     Trie trie;
