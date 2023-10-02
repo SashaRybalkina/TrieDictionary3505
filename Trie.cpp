@@ -128,6 +128,33 @@ void Trie::traverseAndAdd(char first, string subString)
     }
 }
 
+/// @brief Helper method for allWordsStartingWithPrefix. This method
+/// takes care of the logic for traversing to the branch of the last
+/// character in the prefix and then recursively checking all of the
+/// branches of the last character by calling checkAllBranches.
+/// @param allWords: The string vector being added to.
+/// @param prefix: The prefix.
+void Trie::traverseToEndOfPrefix(vector<string> allWords, string prefix)
+{
+    Trie temp = branching[prefix[0]];
+    if (prefix.size() == 1)
+    {
+        temp.checkAllBranches(allWords, prefix);
+    }
+    else
+    {
+        for (int i = 1; i < prefix.size(); i++)
+        {
+            char current = prefix[i];
+            if (i == prefix.size() - 1 && temp.branching.count(current))
+            {
+                temp.branching[current].checkAllBranches(allWords, prefix);
+            }                
+            temp = temp.branching[current];
+        }
+    }
+}
+
 /// @brief Takes in a word and adds it to the trie by recursively
 /// adding each character of the word as a branch in the branches
 /// array. Once the word is added, the isAWord flag of the last
@@ -197,29 +224,15 @@ vector<string> Trie::allWordsStartingWithPrefix(string prefix)
         allWords.push_back(prefix);
     }
     
-    /// Traverses down to the last character of the prefix and calls
-    /// the checkAllBranches method on the node of the last character
-    /// once it is reached.
+    /// If the prefix isn't empty, traverses down to the last character
+    /// of the prefix and calls the checkAllBranches method on the node
+    /// of the last character once it is reached.
     if (branching.count(prefix[0]))
     {
-        Trie temp = branching[prefix[0]];
-        if (prefix.size() == 1)
-        {
-            temp.checkAllBranches(allWords, prefix);
-        }
-        else
-        {
-            for (int i = 1; i < prefix.size(); i++)
-            {
-                char current = prefix[i];
-                if (i == prefix.size() - 1 && temp.branching.count(current))
-                {
-                    temp.branching[current].checkAllBranches(allWords, prefix);
-                }
-                temp = temp.branching[current];
-            }
-        }
+        traverseToEndOfPrefix(allWords, prefix);
     }
+    /// If the prefix is empty, adds all existing words in the tree to the
+    /// vector.
     else
     {
         checkAllBranches(allWords, prefix);
