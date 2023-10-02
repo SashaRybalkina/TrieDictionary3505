@@ -27,7 +27,7 @@ class Trie
         void checkAllBranches(std::vector<std::string> &words, std::string buildString);
         bool checkIfValid(std::string word);
         void traverseAndAdd(char first, std::string subString);
-        void traverseToEndOfPrefix(std::vector<std::string> &allWords, std::string prefix);
+        void getAllWordsOfPrefix(std::vector<std::string> &allWords, std::string prefix);
 
     public:
         Trie();

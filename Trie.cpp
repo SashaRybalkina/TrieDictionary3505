@@ -120,11 +120,11 @@ void Trie::traverseAndAdd(char first, string subString)
     }
     else
     {
-        Trie temp;
-        temp.addWord(subString);
+        Trie currentBranch;
+        currentBranch.addWord(subString);
         /// Set this branch in the current Trie to the new branch we
         /// created.
-        branching[first] = temp;
+        branching[first] = currentBranch;
     }
 }
 
@@ -134,23 +134,23 @@ void Trie::traverseAndAdd(char first, string subString)
 /// branches of the last character by calling checkAllBranches.
 /// @param allWords: The string vector being added to.
 /// @param prefix: The prefix.
-void Trie::traverseToEndOfPrefix(vector<string> &allWords, string prefix)
+void Trie::getAllWordsOfPrefix(vector<string> &allWords, string prefix)
 {
-    Trie temp = branching[prefix[0]];
+    Trie currentBranch = branching[prefix[0]];
     if (prefix.size() == 1)
     {
-        temp.checkAllBranches(allWords, prefix);
+        currentBranch.checkAllBranches(allWords, prefix);
     }
     else
     {
         for (int i = 1; i < prefix.size(); i++)
         {
             char current = prefix[i];
-            if (i == prefix.size() - 1 && temp.branching.count(current))
+            if (i == prefix.size() - 1 && currentBranch.branching.count(current))
             {
-                temp.branching[current].checkAllBranches(allWords, prefix);
+                currentBranch.branching[current].checkAllBranches(allWords, prefix);
             }                
-            temp = temp.branching[current];
+            currentBranch = currentBranch.branching[current];
         }
     }
 }
@@ -229,7 +229,7 @@ vector<string> Trie::allWordsStartingWithPrefix(string prefix)
     /// of the last character once it is reached.
     if (branching.count(prefix[0]))
     {
-        traverseToEndOfPrefix(allWords, prefix);
+        getAllWordsOfPrefix(allWords, prefix);
     }
     /// If the prefix is empty, adds all existing words in the tree to the
     /// vector.
