@@ -1,8 +1,8 @@
 /*
 Name: Sasha Rybalkina
 Class: CS3505
-Assignment: A4: A Trie and Rule-of-Three
-Date: September 26, 2023
+Assignment: A5: Refactoring and Testing
+Date: October 3, 2023
 */
 
 #ifndef TRIE_H

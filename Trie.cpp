@@ -1,8 +1,8 @@
 /*
 Name: Sasha Rybalkina
 Class: CS3505
-Assignment: A4: A Trie and Rule-of-Three
-Date: September 26, 2023
+Assignment: A5: Refactoring and Testing
+Date: October 3, 2023
 */
 
 #include <iostream>
@@ -206,6 +206,10 @@ vector<string> Trie::allWordsStartingWithPrefix(string prefix)
                 }
             }
         }
+    }
+    else
+    {
+        checkAllBranches(allWords, prefix);
     }
     return allWords;
 }

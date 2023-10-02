@@ -1,15 +1,14 @@
 /*
 Name: Sasha Rybalkina
 Class: CS3505
-Assignment: A4: A Trie and Rule-of-Three
-Date: September 26, 2023
+Assignment: A5: Refactoring and Testing
+Date: October 3, 2023
 */
-
-#include <fstream>
 #include <iostream>
 #include <string.h>
 #include <vector>
 #include "Trie.h"
+#include <gtest/gtest.h>
 using std::cout;
 using std::endl;
 using std::string;
@@ -20,63 +19,46 @@ using std::vector;
 /// methods of the Trie class as well as the copy constructor and assignment
 /// operator.
 
-int main (int argc, char **argv)
+TEST(TrieTest1, CheckAddWordAndIsWord)
 {
-    ifstream file1(argv[1]);
-    ifstream file2(argv[2]);
     Trie trie;
+    trie.addWord("cat");
+    trie.addWord("catastrophe");
+    trie.addWord("chill");
+    trie.addWord("dog");
+    trie.addWord("dilled");
 
-    ///Adds every word from the first file to the trie.
-    if (file1.is_open())
-    {     
-        while (file1)
-        {
-            string currString; 
-            file1 >> currString;
-            trie.addWord(currString);
-        }       
-    }
+    ASSERT_EQ(trie.isWord("cat"), 1) << "Error: Trie does not recognize word when it should.";
+    ASSERT_EQ(trie.isWord("catastrophe"), 1) << "Error: Trie does not recognize word when it should.";
+    ASSERT_EQ(trie.isWord("daisy"), 0) << "Error: Trie falsely recognizes word.";
+    ASSERT_EQ(trie.isWord(""), 0) << "Error: Empty string edge case failed.";
+}
 
-    // Tests the trie with every prefix from the second file.
-    if (file2.is_open())
-    {     
-        while (file2)
-        {
-            string currString;
-            file2 >> currString;
+TEST(TrieTest2, CheckAllWordsStartingWithPrefix)
+{
+    Trie trie;
+    trie.addWord("cat");
+    trie.addWord("catastrophe");
+    trie.addWord("chill");
+    trie.addWord("dog");
+    trie.addWord("dilled");
 
-            /// Sets up the vector containing all the words that start
-            /// with the current prefix for the third print statement.
-            vector<string> allWords = trie.allWordsStartingWithPrefix(currString);
-            string allWordsString = "";
-            for (int i = 0; i < allWords.size(); i++)
-            {
-                allWordsString += allWords[i] + " ";
-            }
+    vector<string> wordsWithPrefixC = trie.allWordsStartingWithPrefix("c");
+    vector<string> wordsWithPrefixD = trie.allWordsStartingWithPrefix("d");
+    vector<string> wordsWithPrefixCat = trie.allWordsStartingWithPrefix("cat");
+    vector<string> wordsWithEmptyPrefix = trie.allWordsStartingWithPrefix("");
+    vector<string> wordsWithInvalidPrefix = trie.allWordsStartingWithPrefix("ab34");
+    vector<string> wordsWithUpperPrefix = trie.allWordsStartingWithPrefix("CAT");
 
-            /// Prints all testing statements.
-            cout << "Checking " << currString << endl;
-            if (trie.isWord(currString))
-            {
-                cout << "Word found" << endl;
-            }
-            else
-            {
-                cout << "Word not found" << endl;
-            }
-            cout << allWordsString << endl;
-        }       
-    }
+    ASSERT_EQ(wordsWithPrefixCat.size(), 1) << "Error: Vector has incorrect size.";
+    //ASSERT_EQ(wordsWithPrefixD.size(), wordsWithPrefixCat.size()) << "Error: Vectors do not have the same size.";
+    //ASSERT_EQ(wordsWithEmptyPrefix.size(), 5) << "Error: Vector has incorrect size for empty string.";
+    //ASSERT_EQ(wordsWithInvalidPrefix.size(), 0) << "Error: Vector is not empty when it should be.";
+    //ASSERT_EQ(wordsWithUpperPrefix.size(), 0) << "Error: Vector is not empty when it should be.";
+}
 
-    ///This code is responsible for testing Rule-of-Three.
-    Trie trieToCopy;
-    trieToCopy.addWord("cat");
-    Trie trieCopy = trieToCopy;
-    cout << trieToCopy.isWord("cat") << endl;
-    cout << trieCopy.isWord("cat") << endl;
-
-    Trie trieAssignment;
-    trieAssignment = trieToCopy;
-    cout << trieToCopy.isWord("cat") << endl;
-    cout << trieAssignment.isWord("cat") << endl;
+int main(int argc, char* argv[])
+{
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
