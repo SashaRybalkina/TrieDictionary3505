@@ -134,7 +134,7 @@ void Trie::traverseAndAdd(char first, string subString)
 /// branches of the last character by calling checkAllBranches.
 /// @param allWords: The string vector being added to.
 /// @param prefix: The prefix.
-void Trie::traverseToEndOfPrefix(vector<string> allWords, string prefix)
+void Trie::traverseToEndOfPrefix(vector<string> &allWords, string prefix)
 {
     Trie temp = branching[prefix[0]];
     if (prefix.size() == 1)
