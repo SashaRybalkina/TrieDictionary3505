@@ -104,6 +104,30 @@ bool Trie::checkIfValid(string word)
     return true;
 }
 
+/// @brief Helper method for addWord. Checks if a branch with the
+/// given character already exists and calls addWord on that branch
+/// if it does. If it doesn't, adds the branch.
+/// @param first: The first character of the previous word
+/// @param subString: The substring of the previous word excluding
+/// the first character.
+void Trie::traverseAndAdd(char first, string subString)
+{
+    /// If this branch already exists, we do not want to replace
+    /// it with a new one, and so we skip it.
+    if (branching.count(first))
+    {
+        branching[first].addWord(subString);
+    }
+    else
+    {
+        Trie temp;
+        temp.addWord(subString);
+        /// Set this branch in the current Trie to the new branch we
+        /// created.
+        branching[first] = temp;
+    }
+}
+
 /// @brief Takes in a word and adds it to the trie by recursively
 /// adding each character of the word as a branch in the branches
 /// array. Once the word is added, the isAWord flag of the last
@@ -115,20 +139,7 @@ void Trie::addWord(string word)
     {
         char first = word[0];
         string newString = word.substr(1);
-        /// If this branch already exists, we do not want to replace
-        /// it with a new one, and so we skip it.
-        if (branching.count(first))
-        {
-            branching[first].addWord(newString);
-        }
-        else
-        {
-            Trie temp;
-            temp.addWord(newString);
-            /// Set this branch in the current Trie to the new branch we
-            /// created.
-            branching[first] = temp;
-        }
+        traverseAndAdd(first, newString);
     }
     else
     {
